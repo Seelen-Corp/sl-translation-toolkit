@@ -1,10 +1,14 @@
-name: "Release"
+name: 'Release'
 
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+      - 'v[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   continuous-integration:
@@ -12,9 +16,6 @@ jobs:
 
   build-and-publish:
     needs: continuous-integration
-    permissions:
-      contents: read
-      id-token: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,8 +26,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20.x"
-          registry-url: "https://registry.npmjs.org"
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Publish to JSR
         run: deno publish
