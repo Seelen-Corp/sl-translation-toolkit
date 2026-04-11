@@ -1,6 +1,6 @@
 import { asyncSleep } from "../utils/mod.ts";
 import { Translator } from "./trait.ts";
-import * as GoogleTranslatorApi from "npm:google-translate-api-x@10.7.2";
+import * as GoogleTranslatorApi from "google-translate-api-x";
 
 export type SupportedSourceLangCodesByGoogle =
   keyof typeof GoogleTranslatorApi.languages;

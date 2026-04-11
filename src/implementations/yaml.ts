@@ -1,4 +1,4 @@
-import yml from "npm:yaml@2.7.0";
+import yml from "yaml";
 import type { Translator } from "../lib.ts";
 import { FileTranslator } from "./trait.ts";
 import { ObjectTranslator } from "./object.ts";

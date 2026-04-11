@@ -1,6 +1,6 @@
 import { BackwardMapping, isSupported } from "./DeeplUtils.ts";
 import { Translator } from "./trait.ts";
-import * as DeeplTranslatorApi from "npm:deepl-node@1.16.0";
+import * as DeeplTranslatorApi from "deepl-node";
 
 export type SupportedSourceLangCodesByDeepl =
   DeeplTranslatorApi.SourceLanguageCode;
