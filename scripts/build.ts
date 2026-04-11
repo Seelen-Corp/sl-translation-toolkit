@@ -12,10 +12,10 @@ const packageJson: BuildOptions["package"] = {
   license,
   repository: {
     type: "git",
-    url: "git+https://github.com/Seelen-Inc/sl-translation-toolkit.git",
+    url: "git+https://github.com/Seelen-Corp/sl-translation-toolkit.git",
   },
   bugs: {
-    url: "https://github.com/Seelen-Inc/sl-translation-toolkit/issues",
+    url: "https://github.com/Seelen-Corp/sl-translation-toolkit/issues",
   },
 };
 
