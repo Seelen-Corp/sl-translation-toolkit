@@ -123,10 +123,9 @@ const DeeplSupportedTargetLanguages = [
 ] as const;
 
 type OwnList = (typeof DeeplSupportedTargetLanguages)[number];
-type areAllDeeplTargetLanguagesOnTheList = [TargetLanguageCode] extends [OwnList]
-  ? [OwnList] extends [TargetLanguageCode]
-    ? true
-    : false
+type areAllDeeplTargetLanguagesOnTheList = [TargetLanguageCode] extends
+  [OwnList] ? [OwnList] extends [TargetLanguageCode] ? true
+  : false
   : false;
 
 const _assert: areAllDeeplTargetLanguagesOnTheList = true;
