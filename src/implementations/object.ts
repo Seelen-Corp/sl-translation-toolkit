@@ -12,7 +12,11 @@ export class ObjectTranslator<
   private hashTable: Map<string, string>;
   private previusHashTable: Map<string, string>;
 
-  constructor(object: T, translator: Impl_Translator, hashTable?: Map<string, string>) {
+  constructor(
+    object: T,
+    translator: Impl_Translator,
+    hashTable?: Map<string, string>,
+  ) {
     super(translator);
     this.obj = deepSortObject(object);
     this.hashTable = hashTableFromObject(this.obj);
