@@ -1,4 +1,5 @@
 import type { Translator } from "../translators/trait.ts";
+import { deepSortObject, hashTableFromObject } from "../utils/mod.ts";
 import { FileTranslator } from "./trait.ts";
 
 export class ObjectTranslator<
@@ -8,10 +9,19 @@ export class ObjectTranslator<
   Impl_Translator extends Translator<Source, Target>,
 > extends FileTranslator<Impl_Translator> {
   private obj: T;
+  private hashTable: Map<string, string>;
+  private previusHashTable: Map<string, string>;
 
-  constructor(object: T, translator: Impl_Translator) {
+  constructor(object: T, translator: Impl_Translator, hashTable?: Map<string, string>) {
     super(translator);
-    this.obj = object;
+    this.obj = deepSortObject(object);
+    this.hashTable = hashTableFromObject(this.obj);
+    this.previusHashTable = hashTable ?? new Map();
+  }
+
+  /** return sorted and sanitized source, as well hashtable to be saved */
+  source(): { obj: T; hashTable: Map<string, string> } {
+    return { obj: this.obj, hashTable: this.hashTable };
   }
 
   amount(): number {
@@ -26,16 +36,21 @@ export class ObjectTranslator<
     mut_obj: any,
     translator: Translator<string, string>,
     mut_tasks: Array<() => Promise<void>>,
+    hashTable: Map<string, string>,
+    previusHashTable: Map<string, string>,
+    prefix = "",
   ) {
     for (const [key, value] of Object.entries(sourceObj)) {
       if (!value || key.startsWith("_") || key.startsWith("$")) {
         continue;
       }
 
+      const path = prefix ? `${prefix}.${key}` : key;
+
       switch (typeof value) {
         case "string": {
-          if (!mut_obj[key]) {
-            // skip existing translations
+          const changed = hashTable.get(path) !== previusHashTable.get(path);
+          if (!mut_obj[key] || changed) {
             mut_tasks.push(async () => {
               mut_obj[key] = await translator.translate_to(target, value);
             });
@@ -50,6 +65,9 @@ export class ObjectTranslator<
             mut_obj[key],
             translator,
             mut_tasks,
+            hashTable,
+            previusHashTable,
+            path,
           );
           break;
         }
@@ -82,9 +100,11 @@ export class ObjectTranslator<
       translating,
       this.translator,
       tasks,
+      this.hashTable,
+      this.previusHashTable,
     );
     await this.performTasks(tasks, target);
-    return translating;
+    return deepSortObject(translating);
   }
 }
 

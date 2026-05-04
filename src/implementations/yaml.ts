@@ -8,16 +8,19 @@ export class YamlTranslator<
   Target extends string,
   Impl_Translator extends Translator<Source, Target>,
 > extends FileTranslator<Impl_Translator> {
-  private object_translator: ObjectTranslator<
-    object,
-    Source,
-    Target,
-    Impl_Translator
-  >;
+  private object_translator: ObjectTranslator<object, Source, Target, Impl_Translator>;
 
-  constructor(yaml: string, translator: Impl_Translator) {
+  constructor(yaml: string, translator: Impl_Translator, hashTable?: Map<string, string>) {
     super(translator);
-    this.object_translator = new ObjectTranslator(yml.parse(yaml), translator);
+    this.object_translator = new ObjectTranslator(yml.parse(yaml), translator, hashTable);
+  }
+
+  /** return sorted and sanitized source, as well hashtable to be saved */
+  source(): { yaml: string; hashTable: Map<string, string> } {
+    return {
+      yaml: yml.stringify(this.object_translator.source().obj),
+      hashTable: this.object_translator.source().hashTable,
+    };
   }
 
   override amount(): number {
