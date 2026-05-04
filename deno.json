@@ -1,7 +1,7 @@
 {
   "name": "@seelen/translation-toolkit",
   "description": "Seelen Translation Toolkit",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "license": "Apache-2.0",
   "tasks": {
     "build": "deno run -A ./scripts/build.ts",
