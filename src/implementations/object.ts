@@ -96,7 +96,9 @@ export class ObjectTranslator<
   async translate_to(target: Target, cached?: T): Promise<T> {
     this.printInitialInfoAsNeeded();
     // deno-lint-ignore no-explicit-any
-    const translating: any = cached || (Array.isArray(this.obj) ? [] : {});
+    const translating: any = Array.isArray(this.obj)
+      ? (Array.isArray(cached) ? cached : [])
+      : (cached || {});
     const tasks: Array<() => Promise<void>> = [];
     ObjectTranslator.create_translation_tasks(
       this.obj,
